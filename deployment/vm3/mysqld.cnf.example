@@ -1,0 +1,3 @@
+[mysqld]
+# Sustituye la dirección por la IP interna real de VM3.
+bind-address = 10.77.0.30

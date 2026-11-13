@@ -1,0 +1,8 @@
+# Reemplaza enp0s3/enp0s8 por las interfaces detectadas con `ip -br link`.
+network:
+  version: 2
+  ethernets:
+    enp0s3:
+      dhcp4: true
+    enp0s8:
+      addresses: [10.77.0.30/24]

@@ -1,0 +1,10 @@
+# Despliegue en tres máquinas
+
+1. Crea `web-01`, `api-01` y `db-01` con Ubuntu Server LTS. En VirtualBox usa Adaptador 1 NAT y Adaptador 2 en la red interna `laundry-internal`; asigna respectivamente `10.77.0.10`, `.20` y `.30` en Netplan. La guía de red documenta los puertos reenviados a `127.0.0.1`.
+2. En VM3, configura `bind-address = 10.77.0.30` en `/etc/mysql/mysql.conf.d/mysqld.cnf` usando `deployment/vm3/mysqld.cnf.example`, reinicia MySQL y aplica `database/schema.sql`. Crea el usuario de aplicación limitado a `10.77.0.20` según [database.md](database.md).
+3. En VM2, copia el backend, crea `.env` con `DB_HOST=10.77.0.30` y el usuario de VM3, genera un JWT aleatorio de al menos 32 caracteres y marca `COOKIE_SECURE=true` al utilizar HTTPS. Ejecuta `npm ci`, `npm run build`, `npm run create-admin` y `pm2 start ecosystem.config.cjs --env production`.
+4. En VM1, ajusta `proxy_pass` de Nginx si cambió la IP de VM2. Ejecuta `npm ci`, `npm run build`, publica `dist` en `/var/www/laundry-manager/dist`, instala `nginx.conf`, verifica con `sudo nginx -t` y recarga.
+5. Configura SSH y firewall desde las redes administrativas/usuarias conocidas antes de habilitar UFW. Usa los scripts de VM1, VM2 y VM3 sólo después de definir sus variables `ADMIN_CIDR`, `USER_CIDR`, `WEB_IP` y `API_IP` requeridas. En la topología NAT, valida el origen de las conexiones reenviadas antes de usar `10.0.2.2/32` en esas variables.
+6. Desde VM1: `curl -i http://10.77.0.20:3000/api/health`. Desde VM2: `curl -i http://localhost:3000/api/health`; verifica MySQL desde VM2 con `mysql -h 10.77.0.30 -u laundry_api -p laundry_manager`. Desde Windows, valida el sitio en `http://127.0.0.1:8080`.
+
+Los scripts de instalación asumen Node/NPM disponibles en el repositorio de Ubuntu; para producción, instala una versión LTS vigente desde un origen confiable y verifica sus firmas. Ajusta los directorios si el proyecto se despliega en otra ruta. Registra los resultados de conectividad, API, MySQL y flujo de navegador al completar el despliegue de los tres nodos.
