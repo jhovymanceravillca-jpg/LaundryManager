@@ -94,7 +94,7 @@ El backend calcula importes usando los precios almacenados en MySQL. Los formula
 Navegador → React/Nginx (VM1) → /api → Express (VM2) → MySQL (VM3)
 ```
 
-Consulta [docs/architecture.md](docs/architecture.md), [docs/deployment.md](docs/deployment.md), [docs/network.md](docs/network.md), [docs/testing.md](docs/testing.md) y [docs/presentation.md](docs/presentation.md) para el modelo, puesta en marcha, red, pruebas y defensa académica. El despliegue de ejemplo usa una red interna de VirtualBox `10.77.0.0/24` y reglas NAT para acceder desde Windows.
+Consulta [docs/architecture.md](docs/architecture.md), [docs/deployment.md](docs/deployment.md), [docs/network.md](docs/network.md), [docs/testing.md](docs/testing.md), [docs/presentation.md](docs/presentation.md) y [docs/documentacion-y-presentacion.md](docs/documentacion-y-presentacion.md) para el modelo, puesta en marcha, red, pruebas y materiales de defensa académica. El despliegue de ejemplo usa una red interna de VirtualBox `10.77.0.0/24` y reglas NAT para acceder desde Windows.
 
 ## Seguridad y alcance
 
