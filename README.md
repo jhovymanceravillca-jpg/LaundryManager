@@ -48,6 +48,14 @@ MySQL pedirá la contraseña de `root` sin mostrarla. Las instalaciones nuevas q
 
 En Linux/macOS, aplica la misma migración con `mysql -u root -p < database/migrations/001-app-settings.sql`.
 
+Las bases existentes deben aplicar también `003-user-session-version.sql` antes de actualizar la API; esta migración permite invalidar sesiones cuando se cambia un rol, se desactiva una cuenta, se restablece una contraseña o se cierra sesión. La migración es idempotente: si la columna ya existe, no hace cambios. En CMD, desde la raíz del proyecto:
+
+```cmd
+"C:\Program Files\MySQL\MySQL Server 8.4\bin\mysql.exe" --protocol=TCP --host=127.0.0.1 --user=root --password < "database\migrations\003-user-session-version.sql"
+```
+
+En Linux/macOS: `mysql -u root -p < database/migrations/003-user-session-version.sql`. Las instalaciones nuevas que apliquen `database/schema.sql` ya incluyen la columna y no necesitan esta migración.
+
 ## Inicio local en Linux/macOS
 
 1. Crear la base y aplicar el esquema:
@@ -94,7 +102,7 @@ El backend calcula importes usando los precios almacenados en MySQL. Los formula
 Navegador → React/Nginx (VM1) → /api → Express (VM2) → MySQL (VM3)
 ```
 
-Consulta [docs/architecture.md](docs/architecture.md), [docs/deployment.md](docs/deployment.md), [docs/network.md](docs/network.md), [docs/testing.md](docs/testing.md), [docs/presentation.md](docs/presentation.md) y [docs/documentacion-y-presentacion.md](docs/documentacion-y-presentacion.md) para el modelo, puesta en marcha, red, pruebas y materiales de defensa académica. El despliegue de ejemplo usa una red interna de VirtualBox `10.77.0.0/24` y reglas NAT para acceder desde Windows.
+Consulta [docs/architecture.md](docs/architecture.md), [docs/deployment.md](docs/deployment.md), [docs/network.md](docs/network.md), [docs/testing.md](docs/testing.md), [docs/presentation.md](docs/presentation.md) y [docs/documentacion-y-presentacion.md](docs/documentacion-y-presentacion.md) para el modelo, puesta en marcha, red, pruebas y materiales de defensa académica. El despliegue de ejemplo usa una red solo-anfitrión (Host-only) de VirtualBox `192.168.56.0/24` y reglas NAT para acceder desde Windows.
 
 ## Seguridad y alcance
 

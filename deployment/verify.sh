@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-API_URL="${API_URL:-http://10.77.0.20:3000}"
-DB_HOST="${DB_HOST:-10.77.0.30}"
+API_URL="${API_URL:-http://192.168.56.20:3000}"
+DB_HOST="${DB_HOST:-192.168.56.30}"
 
 echo "Comprobando API..."
 curl --fail --silent --show-error "$API_URL/api/health"

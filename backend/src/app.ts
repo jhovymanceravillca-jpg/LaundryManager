@@ -14,6 +14,7 @@ app.use(cookieParser());
 const authRateLimit = rateLimit({ windowMs: 15 * 60 * 1000, limit: 10, standardHeaders: true, legacyHeaders: false });
 app.use('/api/auth/login', authRateLimit);
 app.use('/api/auth/setup', authRateLimit);
+app.use('/api/auth/password', authRateLimit);
 app.use('/api', api);
 app.use((_req, res) => res.status(404).json({ error: 'No se encontró el recurso solicitado.' }));
 app.use(errorHandler);

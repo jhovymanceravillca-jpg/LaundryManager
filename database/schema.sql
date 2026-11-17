@@ -6,9 +6,13 @@ CREATE TABLE IF NOT EXISTS users (
   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   full_name VARCHAR(120) NOT NULL,
   email VARCHAR(190) NOT NULL UNIQUE,
+  phone VARCHAR(40) NULL,
+  avatar_url MEDIUMTEXT NULL,
   password_hash VARCHAR(255) NOT NULL,
-  role ENUM('ADMIN','STAFF') NOT NULL DEFAULT 'STAFF',
+  role ENUM('ADMIN','STAFF','CLIENT') NOT NULL DEFAULT 'STAFF',
   active BOOLEAN NOT NULL DEFAULT TRUE,
+  token_version INT UNSIGNED NOT NULL DEFAULT 0,
+  last_login_at TIMESTAMP NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
@@ -128,3 +132,18 @@ CREATE TABLE IF NOT EXISTS app_settings (
 
 INSERT IGNORE INTO app_settings (setting_key, accent_color, font_family, background_mode)
 VALUES ('appearance', '#2863e9', 'system', 'light');
+
+CREATE TABLE IF NOT EXISTS laundry_shops (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(120) NOT NULL,
+  address VARCHAR(255) NOT NULL,
+  phone VARCHAR(40) NULL,
+  latitude DECIMAL(10,7) NOT NULL,
+  longitude DECIMAL(10,7) NOT NULL,
+  opening_hours VARCHAR(80) NULL,
+  rating DECIMAL(2,1) NOT NULL DEFAULT 4.5,
+  services_summary VARCHAR(255) NULL,
+  active BOOLEAN NOT NULL DEFAULT TRUE,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_shops_active (active)
+) ENGINE=InnoDB;

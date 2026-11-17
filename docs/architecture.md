@@ -1,9 +1,9 @@
 # Arquitectura
 
 ```text
-Usuario → NAT de VirtualBox → Nginx VM1 (10.77.0.10)
-        → Express VM2 (10.77.0.20:3000)
-        → MySQL VM3 (10.77.0.30:3306) → Express → React → Usuario
+Usuario → Host-only/NAT de VirtualBox → Nginx VM1 (192.168.56.10)
+        → Express VM2 (192.168.56.20:3000)
+        → MySQL VM3 (192.168.56.30:3306) → Express → React → Usuario
 ```
 
 VM1 sirve los recursos estáticos compilados de React y proxya `/api/` a VM2. VM2 valida solicitudes, aplica reglas de negocio y realiza consultas parametrizadas con un pool mysql2. VM3 conserva los datos y sólo acepta conexiones del backend.

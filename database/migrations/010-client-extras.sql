@@ -1,0 +1,36 @@
+USE laundry_manager;
+
+CREATE TABLE IF NOT EXISTS user_favorites (
+  user_id BIGINT UNSIGNED NOT NULL,
+  shop_id BIGINT UNSIGNED NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (user_id, shop_id),
+  CONSTRAINT fk_fav_user FOREIGN KEY (user_id) REFERENCES users(id),
+  CONSTRAINT fk_fav_shop FOREIGN KEY (shop_id) REFERENCES laundry_shops(id)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS shop_bookings (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  shop_id BIGINT UNSIGNED NOT NULL,
+  user_id BIGINT UNSIGNED NOT NULL,
+  service VARCHAR(80) NOT NULL,
+  scheduled_at DATETIME NOT NULL,
+  status ENUM('PENDIENTE','CONFIRMADO','CANCELADO','COMPLETADO') NOT NULL DEFAULT 'PENDIENTE',
+  notes VARCHAR(500) NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_booking_shop FOREIGN KEY (shop_id) REFERENCES laundry_shops(id),
+  CONSTRAINT fk_booking_user FOREIGN KEY (user_id) REFERENCES users(id),
+  INDEX idx_booking_user (user_id, scheduled_at)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS shop_messages (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  shop_id BIGINT UNSIGNED NOT NULL,
+  user_id BIGINT UNSIGNED NOT NULL,
+  sender ENUM('CLIENTE','NEGOCIO') NOT NULL DEFAULT 'CLIENTE',
+  message VARCHAR(1000) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_msg_shop FOREIGN KEY (shop_id) REFERENCES laundry_shops(id),
+  CONSTRAINT fk_msg_user FOREIGN KEY (user_id) REFERENCES users(id),
+  INDEX idx_msg_shop (shop_id, created_at)
+) ENGINE=InnoDB;
