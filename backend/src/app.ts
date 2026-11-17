@@ -22,8 +22,15 @@ app.use('/api/auth/password', authRateLimit);
 app.use('/api', api);
 
 // Servir el frontend compilado (monorepo) cuando exista dist.
-const frontendDist = path.resolve(process.cwd(), 'frontend', 'dist');
-if (fs.existsSync(frontendDist)) {
+// Se resuelve relativo a backend/dist (o backend/src en dev) para que funcione
+// aunque el proceso arranque desde la raíz del repo o desde backend/.
+const candidates = [
+  path.resolve(__dirname, '..', '..', 'frontend', 'dist'),
+  path.resolve(__dirname, '..', 'frontend', 'dist'),
+  path.resolve(process.cwd(), 'frontend', 'dist')
+];
+const frontendDist = candidates.find((p) => fs.existsSync(path.join(p, 'index.html')));
+if (frontendDist) {
   app.use(express.static(frontendDist));
   app.get(/^\/(?!api).*/, (_req, res) => {
     res.sendFile(path.join(frontendDist, 'index.html'));
