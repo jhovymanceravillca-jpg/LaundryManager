@@ -1,0 +1,12 @@
+{
+  "name": "laundry-manager",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "cd backend && npm ci --include=dev && npm run build && cd ../frontend && npm ci --include=dev && npm run build",
+    "start": "node backend/dist/server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
